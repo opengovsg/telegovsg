@@ -1,14 +1,31 @@
 import { Module } from '@nestjs/common';
+
+import { TelegrafModule } from 'nestjs-telegraf';
+import { ConfigModule } from '@nestjs/config';
+
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
-import { ConfigModule } from '@nestjs/config';
+import { BotModule } from './bot/bot.module';
+
 @Module({
   imports: [
-    ConfigModule.forRoot({
-      envFilePath: ['.env.development.local', '.env.development'],
+    ConfigModule.forRoot(),
+    TelegrafModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: () => ({
+        token: process.env.BOT_TOKEN,
+        launchOptions: {
+          webhook: {
+            domain: process.env.BOT_CALLBACK,
+            hookPath: process.env.BOT_PATH,
+          },
+        },
+        include: [BotModule],
+      }),
     }),
     AuthModule,
+    BotModule,
   ],
   controllers: [AppController],
   providers: [AppService],

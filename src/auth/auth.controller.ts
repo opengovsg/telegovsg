@@ -11,18 +11,24 @@ import { plainToInstance } from 'class-transformer';
 import { Request, Response } from 'express';
 import { AuthService } from './auth.service';
 import { SgidCallbackCookieDto } from './auth.dto';
+import { InjectBot } from 'nestjs-telegraf';
+import { Context, Telegraf } from 'telegraf';
+import { SgidAuthStatus } from './auth.constants';
 
 const SGID_PO_COOKIE_NAME = 'SGID_PO_COOKIE_NAME';
-const SGID_DEMO_BOT_URL = 'https://t.me/sgid_demo_bot';
+const TELEGRAM_PREFIX = `https://t.me`;
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    @InjectBot() private readonly bot: Telegraf<Context>,
+  ) {}
   @Get('sgid/auth-url')
   generateSgIdAuthUrl(
     @Query('chatId') chatId: string,
     @Res({ passthrough: true }) res: Response,
-  ): string {
+  ) {
     const { codeVerifier, codeChallenge, nonce } =
       this.authService.generateSgidLoginParams();
     const url = this.authService.createSgidAuthUrl({
@@ -37,13 +43,13 @@ export class AuthController {
 
     res.cookie(SGID_PO_COOKIE_NAME, cookie, { httpOnly: true });
     res.redirect(url);
-    return url;
   }
 
   @Get('sgid/callback')
   async sgidCallback(
     @Req() req: Request,
     @Query('code') code: string,
+    @Query('state') chatId: string,
     @Res({ passthrough: true }) res: Response,
   ) {
     // One time validity
@@ -72,9 +78,23 @@ export class AuthController {
       codeVerifier: cookieInstance.codeVerifier,
     });
 
-    // TODO: Insert custom flow depending on the authentication status.
+    // TODO - Have the bot send different messages depending on outcome
+    if (authStatus === SgidAuthStatus.AUTHENTICATED_PUBLIC_OFFICER) {
+      await this.bot.telegram.sendMessage(
+        chatId,
+        'Authenticated Public Officer',
+      );
+    } else if (authStatus === SgidAuthStatus.AUTHENTICATED_USER) {
+      await this.bot.telegram.sendMessage(
+        chatId,
+        'Authenticated, but not Public Officer',
+      );
+    } else {
+      await this.bot.telegram.sendMessage(chatId, 'Not authenticated');
+    }
 
     // Redirect to telegram bot
-    res.redirect(SGID_DEMO_BOT_URL);
+    const { username: botName } = await this.bot.telegram.getMe();
+    res.redirect(`${TELEGRAM_PREFIX}/${botName}`);
   }
 }

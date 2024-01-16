@@ -26,6 +26,23 @@
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
+#### Prerequisites
+
+##### Register client on sgid
+
+1. Register a client on developer.id.gov.sg with `PUBLIC OFFICER DETAILS` included in the scope.
+2. Include `http://localhost:3000/auth/sgid/callback` in the Redirect Urls.
+
+##### Environment variables
+
+The server needs a few environment variables to be set for it to function. They are:
+
+| Name                      | What It Is                                                 | Example                                               |
+| ------------------------- | ---------------------------------------------------------- | ----------------------------------------------------- |
+| `SGID_CLIENT_ID`          | The client ID provided during client registration          | TELEGOVSG-780ba228                                    |
+| `SGID_CLIENT_SECRET`      | The client secret provided during client registration      | asdfn_v1_6DBRljleevjsd9DHPThsKDVDSenssCwW9zfA8W2ddf/T |
+| `SGID_CLIENT_PRIVATE_KEY` | The client private key provided during client registration | xxxxxxxxxx                                            |
+
 ## Installation
 
 ```bash

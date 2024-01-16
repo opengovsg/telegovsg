@@ -45,46 +45,21 @@ The server needs a few environment variables to be set for it to function. They 
 
 ## Installation
 
+## Setting up local development environment
+### Create env file
+1. Copy .env.example to .env
 ```bash
-$ npm install
+$ cp .env.example .env
 ```
+### Set up telegram bot
+1. Create a new bot with BotFather
+2. Copy the token and paste it in the .env file in BOT_TOKEN
 
-## Running the app
-
+### Set up tunnel to get a domain name for the webhook
+1. Install ngrok
+2. Go to [ngrok dashboard](https://dashboard.ngrok.com/cloud-edge/domains) and create a new permanent domain
+3. Copy the domain and paste it in the .env file in BOT_DOMAIN
+4. Run ngrok with the following command whenever you're doing local testing
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+$ ngrok http <YOUR_DOMAIN> 3000
 ```
-
-## Test
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).

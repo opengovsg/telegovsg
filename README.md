@@ -41,7 +41,7 @@ The server needs a few environment variables to be set for it to function. They 
 | ------------------------- | ---------------------------------------------------------- | ----------------------------------------------------- |
 | `SGID_CLIENT_ID`          | The client ID provided during client registration          | TELEGOVSG-780ba228                                    |
 | `SGID_CLIENT_SECRET`      | The client secret provided during client registration      | asdfn_v1_6DBRljleevjsd9DHPThsKDVDSenssCwW9zfA8W2ddf/T |
-| `SGID_CLIENT_PRIVATE_KEY` | The client private key provided during client registration | xxxxxxxxxx                                            |
+| `SGID_PRIVATE_KEY` | The client private key provided during client registration | xxxxxxxxxx                                            |
 
 ## Installation
 

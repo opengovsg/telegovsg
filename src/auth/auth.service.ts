@@ -27,7 +27,7 @@ export class AuthService {
       )}/auth/sgid/callback`,
       clientId: this.configService.get<string>('SGID_CLIENT_ID'),
       clientSecret: this.configService.get<string>('SGID_CLIENT_SECRET'),
-      privateKey: this.configService.get<string>('SGID_CLIENT_PRIVATE_KEY'),
+      privateKey: this.configService.get<string>('SGID_PRIVATE_KEY'),
     });
   }
 

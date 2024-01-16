@@ -11,9 +11,9 @@ import { plainToInstance } from 'class-transformer';
 import { Request, Response } from 'express';
 import { AuthService } from './auth.service';
 import { SgidCallbackCookieDto } from './auth.dto';
-import { SgidAuthStatus } from './auth.constants';
 
 const SGID_PO_COOKIE_NAME = 'SGID_PO_COOKIE_NAME';
+const SGID_DEMO_BOT_URL = 'https://t.me/sgid_demo_bot';
 
 @Controller('auth')
 export class AuthController {
@@ -73,6 +73,8 @@ export class AuthController {
     });
 
     // TODO: Insert custom flow depending on the authentication status.
-    return SgidAuthStatus[authStatus];
+
+    // Redirect to telegram bot
+    res.redirect(SGID_DEMO_BOT_URL);
   }
 }

@@ -17,7 +17,7 @@ import { BotModule } from './bot/bot.module';
         token: process.env.BOT_TOKEN,
         launchOptions: {
           webhook: {
-            domain: process.env.BOT_CALLBACK,
+            domain: process.env.BOT_DOMAIN,
             hookPath: process.env.BOT_PATH,
           },
         },

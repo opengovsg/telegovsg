@@ -6,7 +6,6 @@ import SgidClient, {
 } from '@opengovsg/sgid-client';
 import { SgidAuthStatus } from './auth.constants';
 
-const REDIRECT_URL = 'http://localhost:3000/auth/sgid/callback'; // For development only, please update to your deployed server url.
 const SGID_SCOPE_PUBLIC_OFFICER_DETAILS = 'pocdex.public_officer_details';
 const SGID_SCOPE_TO_ACCESS = ['openid', SGID_SCOPE_PUBLIC_OFFICER_DETAILS];
 
@@ -23,7 +22,9 @@ export class AuthService {
   private readonly sgidClient: SgidClient;
   constructor(private configService: ConfigService) {
     this.sgidClient = new SgidClient({
-      redirectUri: REDIRECT_URL,
+      redirectUri: `${this.configService.get<string>(
+        'BOT_DOMAIN',
+      )}/auth/sgid/callback`,
       clientId: this.configService.get<string>('SGID_CLIENT_ID'),
       clientSecret: this.configService.get<string>('SGID_CLIENT_SECRET'),
       privateKey: this.configService.get<string>('SGID_CLIENT_PRIVATE_KEY'),

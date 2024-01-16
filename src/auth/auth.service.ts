@@ -1,9 +1,10 @@
-import { ImATeapotException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import SgidClient, {
   generatePkcePair,
   generateNonce,
 } from '@opengovsg/sgid-client';
+import { SgidAuthStatus } from './auth.constants';
 
 const REDIRECT_URL = 'http://localhost:3000/auth/sgid/callback'; // For development only, please update to your deployed server url.
 const SGID_SCOPE_PUBLIC_OFFICER_DETAILS = 'pocdex.public_officer_details';
@@ -57,7 +58,7 @@ export class AuthService {
     return url;
   }
 
-  async verifyPoFromAuthCode({
+  async verifyUserFromAuthCode({
     code,
     codeVerifier,
     nonce,
@@ -65,23 +66,24 @@ export class AuthService {
     code: string;
     codeVerifier: string;
     nonce: string;
-  }) {
+  }): Promise<SgidAuthStatus> {
     const { accessToken, sub } = await this.sgidClient.callback({
       code,
       codeVerifier,
       nonce,
     });
+    try {
+      const userInfo = await this.sgidClient.userinfo({ sub, accessToken });
+      const rawPoDetails =
+        userInfo.data[SGID_SCOPE_PUBLIC_OFFICER_DETAILS] ?? null;
+      const poDetails: PublicOfficerDetails[] = JSON.parse(rawPoDetails);
 
-    const userInfo = await this.sgidClient.userinfo({ sub, accessToken });
-    const rawPoDetails =
-      userInfo.data[SGID_SCOPE_PUBLIC_OFFICER_DETAILS] ?? null;
-    const poDetails: PublicOfficerDetails[] = JSON.parse(rawPoDetails);
-
-    if (!poDetails || poDetails.length === 0) {
-      return 'You are not authorised to join this channel.';
-    } else {
-      // TODO: Send invite code via telegram bot.
-      return 'You have been verified, the invite link has been sent via our telegram bot.';
+      if (!poDetails || poDetails.length === 0) {
+        return SgidAuthStatus.AUTHENTICATED_USER;
+      }
+      return SgidAuthStatus.AUTHENTICATED_PUBLIC_OFFICER;
+    } catch (err) {
+      return SgidAuthStatus.NOT_AUTHENTICATED;
     }
   }
 }

@@ -11,6 +11,7 @@ import { plainToInstance } from 'class-transformer';
 import { Request, Response } from 'express';
 import { AuthService } from './auth.service';
 import { SgidCallbackCookieDto } from './auth.dto';
+import { SgidAuthStatus } from './auth.constants';
 
 const SGID_PO_COOKIE_NAME = 'SGID_PO_COOKIE_NAME';
 
@@ -40,7 +41,7 @@ export class AuthController {
   }
 
   @Get('sgid/callback')
-  verifyPoSgid(
+  async sgidCallback(
     @Req() req: Request,
     @Query('code') code: string,
     @Res({ passthrough: true }) res: Response,
@@ -65,12 +66,13 @@ export class AuthController {
       );
     }
 
-    const returnMessage = this.authService.verifyPoFromAuthCode({
+    const authStatus = await this.authService.verifyUserFromAuthCode({
       code,
       nonce: cookieInstance.nonce,
       codeVerifier: cookieInstance.codeVerifier,
     });
 
-    return returnMessage;
+    // TODO: Insert custom flow depending on the authentication status.
+    return SgidAuthStatus[authStatus];
   }
 }

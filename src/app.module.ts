@@ -1,24 +1,28 @@
 import { Module } from '@nestjs/common';
 
 import { TelegrafModule } from 'nestjs-telegraf';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { BotModule } from './bot/bot.module';
+import { botEnvConfig, sgidEnvConfig } from './config/env.config';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({
+      load: [sgidEnvConfig, botEnvConfig],
+    }),
     TelegrafModule.forRootAsync({
       imports: [ConfigModule],
-      useFactory: () => ({
-        token: process.env.BOT_TOKEN,
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        token: configService.get<string>('bot.token'),
         launchOptions: {
           webhook: {
-            domain: process.env.BOT_DOMAIN,
-            hookPath: process.env.BOT_PATH,
+            domain: configService.get<string>('bot.domain'),
+            hookPath: configService.get<string>('bot.path'),
           },
         },
         include: [BotModule],

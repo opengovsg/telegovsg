@@ -23,11 +23,11 @@ export class AuthService {
   constructor(private configService: ConfigService) {
     this.sgidClient = new SgidClient({
       redirectUri: `${this.configService.get<string>(
-        'BOT_DOMAIN',
+        'bot.domain',
       )}/auth/sgid/callback`,
-      clientId: this.configService.get<string>('SGID_CLIENT_ID'),
-      clientSecret: this.configService.get<string>('SGID_CLIENT_SECRET'),
-      privateKey: this.configService.get<string>('SGID_PRIVATE_KEY'),
+      clientId: this.configService.get<string>('sgid.client_id'),
+      clientSecret: this.configService.get<string>('sgid.client_secret'),
+      privateKey: this.configService.get<string>('sgid.private_key'),
     });
   }
 

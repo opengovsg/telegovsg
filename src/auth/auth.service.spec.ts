@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AuthService } from './auth.service';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { botEnvConfig, sgidEnvConfig } from '../config/env.config';
 
 describe('AuthService', () => {
   let service: AuthService;
@@ -10,9 +11,18 @@ describe('AuthService', () => {
       imports: [
         ConfigModule.forRoot({
           envFilePath: ['.env.example'],
+          load: [sgidEnvConfig, botEnvConfig],
         }),
       ],
-      providers: [AuthService],
+      providers: [
+        AuthService,
+        {
+          provide: ConfigService,
+          useValue: {
+            get: jest.fn((key: string) => key),
+          },
+        },
+      ],
     }).compile();
 
     service = module.get<AuthService>(AuthService);

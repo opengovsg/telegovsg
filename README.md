@@ -46,20 +46,35 @@ The server needs a few environment variables to be set for it to function. They 
 ## Installation
 
 ## Setting up local development environment
+
 ### Create env file
+
 1. Copy .env.example to .env
+
 ```bash
 $ cp .env.example .env
 ```
+
 ### Set up telegram bot
+
 1. Create a new bot with BotFather
 2. Copy the token and paste it in the .env file in BOT_TOKEN
 
 ### Set up tunnel to get a domain name for the webhook
+
 1. Install ngrok
 2. Go to [ngrok dashboard](https://dashboard.ngrok.com/cloud-edge/domains) and create a new permanent domain
 3. Copy the domain and paste it in the .env file in BOT_DOMAIN
 4. Run ngrok with the following command whenever you're doing local testing
+
 ```bash
 $ ngrok http <YOUR_DOMAIN> 3000
 ```
+
+### Deployment
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fopengovsg%2Ftelegovsg%2Ftree%2Fmaster&env=SGID_CLIENT_ID,SGID_CLIENT_SECRET,SGID_PRIVATE_KEY,BOT_TOKEN)
+
+1. Click the button above to clone and deploy this project.
+2. You will need your SGID secrets and Telegram bot token during the deployment process.
+3. Visit the [SGID dashboard](https://developer.id.gov.sg/dashboard) and add your deployed application's domain name. It should be in the following format: `<project_name>-git-master-<your_name>s-projects.vercel.app`.

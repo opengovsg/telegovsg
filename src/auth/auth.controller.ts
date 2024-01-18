@@ -88,7 +88,7 @@ export class AuthController {
       });
       await this.bot.telegram.sendMessage(
         chatId,
-        `Authenticated Public Officer\n\n${verifiedMessage}`, // would be nice to have Welcome ${name}
+        `Authenticated Public Officer\n\n${verifiedMessage}`,
       );
     } else if (authDetails.status === SgidAuthStatus.AUTHENTICATED_USER) {
       await this.bot.telegram.sendMessage(

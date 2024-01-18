@@ -67,7 +67,7 @@ export class AuthService {
     code: string;
     codeVerifier: string;
     nonce: string;
-  }): Promise<SgidAuthStatus> {
+  }): Promise<{ status: SgidAuthStatus; poDetails?: PublicOfficerDetails[] }> {
     const { accessToken, sub } = await this.sgidClient.callback({
       code,
       codeVerifier,
@@ -80,11 +80,11 @@ export class AuthService {
       const poDetails: PublicOfficerDetails[] = JSON.parse(rawPoDetails);
 
       if (!poDetails || poDetails.length === 0) {
-        return SgidAuthStatus.AUTHENTICATED_USER;
+        return { status: SgidAuthStatus.AUTHENTICATED_USER };
       }
-      return SgidAuthStatus.AUTHENTICATED_PUBLIC_OFFICER;
+      return { status: SgidAuthStatus.AUTHENTICATED_PUBLIC_OFFICER, poDetails };
     } catch (err) {
-      return SgidAuthStatus.NOT_AUTHENTICATED;
+      return { status: SgidAuthStatus.NOT_AUTHENTICATED };
     }
   }
 }

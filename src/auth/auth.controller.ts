@@ -94,7 +94,9 @@ Title: ${object.employment_title}`;
     }
 
     if (message.length) {
-      await this.bot.telegram.sendMessage(chatId, message);
+      await this.bot.telegram.sendMessage(chatId, message, {
+        disable_notification: true,
+      });
     }
 
     // Redirect to telegram bot

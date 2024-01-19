@@ -78,25 +78,23 @@ export class AuthController {
       codeVerifier: cookieInstance.codeVerifier,
     });
 
-    // TODO - Have the bot send different messages depending on outcome
+    let message = '';
     if (authDetails.status === SgidAuthStatus.AUTHENTICATED_PUBLIC_OFFICER) {
       const verifiedMessage = authDetails.poDetails.map((object) => {
-        return `You are verified with the following details: 
-        Agency: ${object.agency_name}
-        Department: ${object.department_name}
-        Title: ${object.employment_title}`;
+        return `You are verified with the following details:\n
+Agency: ${object.agency_name}
+Department: ${object.department_name}
+Title: ${object.employment_title}`;
       });
-      await this.bot.telegram.sendMessage(
-        chatId,
-        `Authenticated Public Officer\n\n${verifiedMessage}`,
-      );
+      message = `Authenticated Public Officer\n\n${verifiedMessage}`;
     } else if (authDetails.status === SgidAuthStatus.AUTHENTICATED_USER) {
-      await this.bot.telegram.sendMessage(
-        chatId,
-        'Authenticated, but not Public Officer',
-      );
+      message = 'Authenticated, but not Public Officer';
     } else {
-      await this.bot.telegram.sendMessage(chatId, 'Not authenticated');
+      message = 'Not authenticated';
+    }
+
+    if (message.length) {
+      await this.bot.telegram.sendMessage(chatId, message);
     }
 
     // Redirect to telegram bot

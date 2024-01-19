@@ -82,9 +82,9 @@ export class AuthController {
     if (authDetails.status === SgidAuthStatus.AUTHENTICATED_PUBLIC_OFFICER) {
       const verifiedMessage = authDetails.poDetails.map((object) => {
         return `You are verified with the following details: 
-        \nAgency: ${object.agency_name}
-        \nDepartment: ${object.department_name}
-        \nTitle: ${object.employment_title}`;
+        Agency: ${object.agency_name}
+        Department: ${object.department_name}
+        Title: ${object.employment_title}`;
       });
       await this.bot.telegram.sendMessage(
         chatId,

@@ -5,11 +5,12 @@ import SgidClient, {
   generateNonce,
 } from '@opengovsg/sgid-client';
 import { SgidAuthStatus } from './auth.constants';
+import { UserService } from '../user/user.service';
 
 const SGID_SCOPE_PUBLIC_OFFICER_DETAILS = 'pocdex.public_officer_details';
 const SGID_SCOPE_TO_ACCESS = ['openid', SGID_SCOPE_PUBLIC_OFFICER_DETAILS];
 
-interface PublicOfficerDetails {
+export interface PublicOfficerDetails {
   work_email: string;
   agency_name: string;
   department_name: string;
@@ -20,7 +21,10 @@ interface PublicOfficerDetails {
 @Injectable()
 export class AuthService {
   private readonly sgidClient: SgidClient;
-  constructor(private configService: ConfigService) {
+  constructor(
+    private configService: ConfigService,
+    private userService: UserService,
+  ) {
     this.sgidClient = new SgidClient({
       redirectUri: `${this.configService.get<string>(
         'bot.domain',
@@ -63,10 +67,12 @@ export class AuthService {
     code,
     codeVerifier,
     nonce,
+    chatId,
   }: {
     code: string;
     codeVerifier: string;
     nonce: string;
+    chatId: string;
   }): Promise<{ status: SgidAuthStatus; poDetails?: PublicOfficerDetails[] }> {
     const { accessToken, sub } = await this.sgidClient.callback({
       code,
@@ -78,10 +84,12 @@ export class AuthService {
       const rawPoDetails =
         userInfo.data[SGID_SCOPE_PUBLIC_OFFICER_DETAILS] ?? null;
       const poDetails: PublicOfficerDetails[] = JSON.parse(rawPoDetails);
-
       if (!poDetails || poDetails.length === 0) {
         return { status: SgidAuthStatus.AUTHENTICATED_USER };
       }
+
+      await this.userService.storePublicOfficer({ chatId, poDetails });
+
       return { status: SgidAuthStatus.AUTHENTICATED_PUBLIC_OFFICER, poDetails };
     } catch (err) {
       return { status: SgidAuthStatus.NOT_AUTHENTICATED };

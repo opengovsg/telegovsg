@@ -7,12 +7,18 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { BotModule } from './bot/bot.module';
-import { botEnvConfig, sgidEnvConfig } from './config/env.config';
+import {
+  botEnvConfig,
+  databaseEnvConfig,
+  sgidEnvConfig,
+} from './config/env.config';
+import { UserModule } from './user/user.module';
+import { DatabaseModule } from './database/database.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
-      load: [sgidEnvConfig, botEnvConfig],
+      load: [sgidEnvConfig, botEnvConfig, databaseEnvConfig],
     }),
     TelegrafModule.forRootAsync({
       imports: [ConfigModule],
@@ -28,6 +34,8 @@ import { botEnvConfig, sgidEnvConfig } from './config/env.config';
         include: [BotModule],
       }),
     }),
+    DatabaseModule,
+    UserModule,
     AuthModule,
     BotModule,
   ],

@@ -74,6 +74,7 @@ export class AuthController {
 
     const authDetails = await this.authService.verifyUserFromAuthCode({
       code,
+      chatId,
       nonce: cookieInstance.nonce,
       codeVerifier: cookieInstance.codeVerifier,
     });

@@ -4,7 +4,12 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthService } from './auth.service';
 import { TelegrafModule } from 'nestjs-telegraf';
 import { BotModule } from '../bot/bot.module';
-import { botEnvConfig, sgidEnvConfig } from '../config/env.config';
+import {
+  botEnvConfig,
+  databaseEnvConfig,
+  sgidEnvConfig,
+} from '../config/env.config';
+import { DatabaseModule } from '../database/database.module';
 
 describe('AuthController', () => {
   let controller: AuthController;
@@ -12,9 +17,10 @@ describe('AuthController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [
+        DatabaseModule,
         ConfigModule.forRoot({
           envFilePath: ['.env.example'],
-          load: [sgidEnvConfig, botEnvConfig],
+          load: [sgidEnvConfig, botEnvConfig, databaseEnvConfig],
         }),
         TelegrafModule.forRootAsync({
           imports: [ConfigModule],
@@ -31,15 +37,7 @@ describe('AuthController', () => {
           }),
         }),
       ],
-      providers: [
-        AuthService,
-        {
-          provide: ConfigService,
-          useValue: {
-            get: jest.fn((key: string) => key),
-          },
-        },
-      ],
+      providers: [AuthService],
       controllers: [AuthController],
     }).compile();
 

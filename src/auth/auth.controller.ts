@@ -26,13 +26,13 @@ export class AuthController {
   ) {}
   @Get('sgid/auth-url')
   generateSgIdAuthUrl(
-    @Query('chatId') chatId: string,
+    @Query('userId') userId: string,
     @Res({ passthrough: true }) res: Response,
   ) {
     const { codeVerifier, codeChallenge, nonce } =
       this.authService.generateSgidLoginParams();
     const url = this.authService.createSgidAuthUrl({
-      chatId,
+      userId,
       codeChallenge,
       nonce,
     });
@@ -49,7 +49,7 @@ export class AuthController {
   async sgidCallback(
     @Req() req: Request,
     @Query('code') code: string,
-    @Query('state') chatId: string,
+    @Query('state') userId: string,
     @Res({ passthrough: true }) res: Response,
   ) {
     // One time validity
@@ -74,7 +74,7 @@ export class AuthController {
 
     const authDetails = await this.authService.verifyUserFromAuthCode({
       code,
-      chatId,
+      userId,
       nonce: cookieInstance.nonce,
       codeVerifier: cookieInstance.codeVerifier,
     });
@@ -95,7 +95,7 @@ Title: ${object.employment_title}`;
     }
 
     if (message.length) {
-      await this.bot.telegram.sendMessage(chatId, message, {
+      await this.bot.telegram.sendMessage(userId, message, {
         disable_notification: true,
       });
     }

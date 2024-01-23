@@ -46,17 +46,17 @@ export class AuthService {
   }
 
   createSgidAuthUrl({
-    chatId,
+    userId,
     nonce,
     codeChallenge,
   }: {
     nonce: string;
-    chatId: string;
+    userId: string;
     codeChallenge: string;
   }): string {
     const { url } = this.sgidClient.authorizationUrl({
       nonce: nonce,
-      state: chatId,
+      state: userId,
       codeChallenge,
       scope: SGID_SCOPE_TO_ACCESS,
     });
@@ -67,12 +67,12 @@ export class AuthService {
     code,
     codeVerifier,
     nonce,
-    chatId,
+    userId,
   }: {
     code: string;
     codeVerifier: string;
     nonce: string;
-    chatId: string;
+    userId: string;
   }): Promise<{ status: SgidAuthStatus; poDetails?: PublicOfficerDetails[] }> {
     const { accessToken, sub } = await this.sgidClient.callback({
       code,
@@ -88,7 +88,7 @@ export class AuthService {
         return { status: SgidAuthStatus.AUTHENTICATED_USER };
       }
 
-      await this.userService.storePublicOfficer({ chatId, poDetails });
+      await this.userService.storePublicOfficer({ userId, poDetails });
 
       return { status: SgidAuthStatus.AUTHENTICATED_PUBLIC_OFFICER, poDetails };
     } catch (err) {

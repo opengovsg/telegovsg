@@ -7,16 +7,28 @@ export class UserService {
   constructor(private readonly databaseService: DatabaseService) {}
 
   async storePublicOfficer({
-    chatId,
+    userId,
     poDetails,
   }: {
-    chatId: string;
+    userId: string;
     poDetails: PublicOfficerDetails[];
   }) {
-    this.databaseService.store.set(chatId, poDetails);
+    if (poDetails.length === 0) return;
+
+    // Store <userId, poDetails>
+    await this.databaseService.store.set(userId, poDetails);
+
+    // Store <email, userId>
+    for (const poDetail of poDetails) {
+      await this.databaseService.store.set(poDetail.work_email, userId);
+    }
   }
 
-  async getPublicOfficerByChatId(chatId: string) {
-    return this.databaseService.store.get(chatId);
+  async getPublicOfficerByUserId(userId: string) {
+    return this.databaseService.store.get(userId);
+  }
+
+  async getPublicOfficierByEmail(email: string) {
+    return this.databaseService.store.get(email);
   }
 }

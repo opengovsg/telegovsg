@@ -6,7 +6,6 @@ import {
   databaseEnvConfig,
   sgidEnvConfig,
 } from '../config/env.config';
-import { UserService } from '../user/user.service';
 import { DatabaseModule } from '../database/database.module';
 
 describe('AuthService', () => {
@@ -21,7 +20,7 @@ describe('AuthService', () => {
           load: [sgidEnvConfig, botEnvConfig, databaseEnvConfig],
         }),
       ],
-      providers: [AuthService, UserService],
+      providers: [AuthService],
     }).compile();
 
     service = module.get<AuthService>(AuthService);

@@ -14,6 +14,7 @@ import { SgidCallbackCookieDto } from './auth.dto';
 import { InjectBot } from 'nestjs-telegraf';
 import { Context, Telegraf } from 'telegraf';
 import { SgidAuthStatus } from './auth.constants';
+import { DatabaseService } from '../database/database.service';
 
 const SGID_PO_COOKIE_NAME = 'SGID_PO_COOKIE_NAME';
 const TELEGRAM_PREFIX = `https://t.me`;
@@ -22,6 +23,7 @@ const TELEGRAM_PREFIX = `https://t.me`;
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
+    private readonly databaseService: DatabaseService,
     @InjectBot() private readonly bot: Telegraf<Context>,
   ) {}
   @Get('sgid/auth-url')
@@ -74,28 +76,36 @@ export class AuthController {
 
     const authDetails = await this.authService.verifyUserFromAuthCode({
       code,
-      userId,
       nonce: cookieInstance.nonce,
       codeVerifier: cookieInstance.codeVerifier,
     });
 
     let message = '';
     if (authDetails.status === SgidAuthStatus.AUTHENTICATED_PUBLIC_OFFICER) {
-      const verifiedMessage = authDetails.poDetails.map((object) => {
-        return `You are verified with the following details:\n
-Agency: ${object.agency_name}
-Department: ${object.department_name}
-Title: ${object.employment_title}`;
+      const verifiedMessage = [`You are verified with the following details:`];
+      for (const poDetail of authDetails.poDetails) {
+        verifiedMessage.push(
+          `Agency: ${poDetail.agency_name} \n Department: ${poDetail.department_name} \n Title: ${poDetail.employment_title}`,
+        );
+      }
+
+      await this.databaseService.store.set(userId, {
+        name: authDetails.name,
+        verified_date: new Date(),
+        emails: authDetails.poDetails.map((poDetail) => poDetail.work_email),
       });
-      message = `Authenticated Public Officer\n\n${verifiedMessage}`;
+
+      message = `Authenticated Public Officer\n\n${verifiedMessage.join('\n')}`;
     } else if (authDetails.status === SgidAuthStatus.AUTHENTICATED_USER) {
       message = 'Authenticated, but not Public Officer';
     } else {
       message = 'Not authenticated';
     }
 
+    // In 1-1 chats between user and bot, `chatId` is identical to `userId`
+    const chatId = userId;
     if (message.length) {
-      await this.bot.telegram.sendMessage(userId, message, {
+      await this.bot.telegram.sendMessage(chatId, message, {
         disable_notification: true,
       });
     }

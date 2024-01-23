@@ -17,7 +17,7 @@ A template to build Telegram bots for Singapore Government public officers
 - If this is your first time doing so, set your email to your gov.sg email address
   in your [profile page](https://developer.id.gov.sg/profile).
 
-2. Create a new sgID client, with `PUBLIC OFFICER DETAILS` included in the scope.  
+2. Create a new sgID client, with `NAME` and `PUBLIC OFFICER DETAILS` included in the scope.  
    Store the secrets in a safe location.
 3. Add `http://localhost:3000/auth/sgid/callback` to the list of Redirect URLs.
 

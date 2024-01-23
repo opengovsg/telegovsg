@@ -9,8 +9,7 @@ import {
   databaseEnvConfig,
   sgidEnvConfig,
 } from '../config/env.config';
-import { UserService } from '../user/user.service';
-import { UserModule } from '../user/user.module';
+import { DatabaseModule } from '../database/database.module';
 
 describe('AuthController', () => {
   let controller: AuthController;
@@ -18,7 +17,7 @@ describe('AuthController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [
-        UserModule,
+        DatabaseModule,
         ConfigModule.forRoot({
           envFilePath: ['.env.example'],
           load: [sgidEnvConfig, botEnvConfig, databaseEnvConfig],
@@ -38,7 +37,7 @@ describe('AuthController', () => {
           }),
         }),
       ],
-      providers: [AuthService, UserService],
+      providers: [AuthService],
       controllers: [AuthController],
     }).compile();
 

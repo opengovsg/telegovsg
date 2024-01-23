@@ -12,7 +12,6 @@ import {
   databaseEnvConfig,
   sgidEnvConfig,
 } from './config/env.config';
-import { UserModule } from './user/user.module';
 import { DatabaseModule } from './database/database.module';
 
 @Module({
@@ -35,7 +34,6 @@ import { DatabaseModule } from './database/database.module';
       }),
     }),
     DatabaseModule,
-    UserModule,
     AuthModule,
     BotModule,
   ],

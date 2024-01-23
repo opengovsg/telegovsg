@@ -14,14 +14,27 @@ export const botEnvConfig = registerAs('bot', () => ({
 }));
 
 export const databaseEnvConfig = registerAs('database', () => {
-  const parsedUrl = parse(process.env.DATABASE_URL);
-  return {
-    url: process.env.DATABASE_URL,
-    host: parsedUrl.host || process.env.DATABASE_HOST,
-    user: parsedUrl.user || process.env.DATABASE_USER,
-    password: parsedUrl.password || process.env.PASSWORD,
-    name: parsedUrl.database || process.env.DATABASE_NAME,
-    port: parseInt(parsedUrl.port || '5432'),
-    ssl: parsedUrl.ssl,
-  };
+  const databaseUrl = process.env.POSTGRES_URL || process.env.DATABASE_URL;
+  if (databaseUrl) {
+    const parsedUrl = parse(databaseUrl);
+    return {
+      url: databaseUrl,
+      host: parsedUrl.host,
+      user: parsedUrl.user,
+      password: parsedUrl.password,
+      name: parsedUrl.database,
+      port: parseInt(parsedUrl.port || '5432'),
+      ssl: parsedUrl.ssl,
+    };
+  } else {
+    return {
+      url: databaseUrl,
+      host: process.env.POSTGRES_HOST || process.env.DATABASE_HOST,
+      user: process.env.POSTGRES_USER || process.env.DATABASE_USER,
+      password: process.env.POSTGRES_PASSWORD || process.env.DATABASE_PASSWORD,
+      name: process.env.POSTGRES_DATABASE || process.env.DATABASE_NAME,
+      port: parseInt(process.env.DATABASE_PORT || '5432'),
+      ssl: process.env.DATABASE_SSL_ENABLED,
+    };
+  }
 });

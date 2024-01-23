@@ -85,7 +85,7 @@ export class AuthController {
       const verifiedMessage = [`You are verified with the following details:`];
       for (const poDetail of authDetails.poDetails) {
         verifiedMessage.push(
-          `Agency: ${poDetail.agency_name} \n Department: ${poDetail.department_name} \n Title: ${poDetail.employment_title}`,
+          `Agency: ${poDetail.agency_name}\nDepartment: ${poDetail.department_name}\nTitle: ${poDetail.employment_title}`,
         );
       }
 

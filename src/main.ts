@@ -16,7 +16,12 @@ async function bootstrap() {
   app.use(cookieParser());
 
   const bot = app.get(getBotToken());
-  bot.use(session({ store: databaseService.store }));
+  bot.use(
+    session({
+      store: databaseService.store,
+      getSessionKey: (ctx) => `${ctx.from.id}`,
+    }),
+  );
   app.use(bot.webhookCallback(configService.get<string>('bot.path')));
   await app.listen(3000);
 }

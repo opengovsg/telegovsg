@@ -89,10 +89,15 @@ export class AuthController {
         );
       }
 
+      const poDetails = authDetails.poDetails.map(
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        ({ work_email: _discarded, ...details }) => details,
+      );
+
       await this.databaseService.store.set(userId, {
         name: authDetails.name,
         verified_date: new Date(),
-        emails: authDetails.poDetails.map((poDetail) => poDetail.work_email),
+        poDetails,
       });
 
       message = `Authenticated Public Officer\n\n${verifiedMessage.join('\n')}`;

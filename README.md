@@ -33,7 +33,7 @@ A template to build Telegram bots for Singapore Government public officers
 
 ### Deployment
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fopengovsg%2Ftelegovsg%2Ftree%2Fmaster&env=SGID_CLIENT_ID,SGID_CLIENT_SECRET,SGID_PRIVATE_KEY,BOT_TOKEN,POSTGRES_URL)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fopengovsg%2Ftelegovsg%2Ftree%2Fmaster&env=SGID_CLIENT_ID,SGID_CLIENT_SECRET,SGID_PRIVATE_KEY,BOT_TOKEN,DATABASE_URL)
 
 1. Click the button above to clone and deploy this project.
 2. Enter the sgID secrets and Telegram bot token obtained from the previous two sections.
@@ -77,6 +77,7 @@ The server needs a few environment variables to be set for it to function. They 
 | `BOT_TOKEN`          | The secret token to identify your bot to Telegram           | `192830192:DSNVIELKSDFLKJSDF-3cslq`                                |
 | `BOT_DOMAIN`         | The domain Telegram uses to send messages to your bot(\*)   | `https://........ngrok-free.app`                                   |
 | `DATABASE_URL`       | The connection string uses to connect to your neon database | `postgresql://<user>:<password>@<host>/<database>?sslmode=require` |
+| `POSTGRES_URL`       | An alias for `DATABASE_URL`                                 | `postgresql://<user>:<password>@<host>/<database>?sslmode=require` |
 
 (\*): If not given, Telegov uses the `VERCEL_BRANCH_URL` environment variable instead. In your local environment, you can use ngrok.
 

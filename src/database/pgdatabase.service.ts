@@ -19,13 +19,17 @@ export class PgDatabaseService extends DatabaseService {
       this.configService.get<string>('database.host') === NEON_SESSION_URL;
 
     const pool = isNeonPasswordless
-      ? new Pool({ host: NEON_SESSION_URL, ssl: true }, NoticeLoggingClient) // Prompts Neon session connection on console
+      ? new Pool(
+          { host: NEON_SESSION_URL, ssl: true, max: 1 },
+          NoticeLoggingClient,
+        ) // Prompts Neon session connection on console
       : new Pool({
           host: this.configService.get<string>('database.host'),
           user: this.configService.get<string>('database.user'),
           password: this.configService.get<string>('database.password'),
           database: this.configService.get<string>('database.name'),
           port: this.configService.get<number>('database.port'),
+
           ssl:
             process.env.NODE_ENV === 'production' ||
             this.configService.get<boolean>('database.ssl'),

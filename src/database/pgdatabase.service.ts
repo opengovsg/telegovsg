@@ -20,7 +20,13 @@ export class PgDatabaseService extends DatabaseService {
 
     const pool = isNeonPasswordless
       ? new Pool(
-          { host: NEON_SESSION_URL, ssl: true, min: 1, max: 1 },
+          {
+            host: NEON_SESSION_URL,
+            ssl: true,
+            min: 1,
+            max: 1,
+            idleTimeoutMillis: 0,
+          },
           NoticeLoggingClient,
         ) // Prompts Neon session connection on console
       : new Pool({

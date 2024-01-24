@@ -1,10 +1,10 @@
 {
   "name": "telegovsg",
   "version": "0.0.1",
-  "description": "",
-  "author": "",
+  "description": "A template for Telegram bots, secured by sgID",
+  "author": "Open Government Products (https://open.gov.sg)",
   "private": true,
-  "license": "UNLICENSED",
+  "license": "MIT",
   "scripts": {
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
@@ -32,7 +32,6 @@
     "dotenv": "^16.3.1",
     "kysely": "^0.23.5",
     "nestjs-telegraf": "^2.7.0",
-    "node-telegram-bot-api": "^0.64.0",
     "pg": "^8.11.3",
     "pg-connection-string": "^2.6.2",
     "pg-pool": "^3.6.1",

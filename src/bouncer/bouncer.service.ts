@@ -41,4 +41,33 @@ export class BouncerService {
       );
     }
   }
+
+  async handleDirectInvite(
+    chatId: number,
+    botId: number,
+    newChatMembers: User[],
+  ) {
+    // Remove any users that join group through direct link instead of invite link
+    if (newChatMembers.some((user) => user.id === botId)) {
+      // TODO: add this to list of channels bot is monitoring, if not already present
+      console.log(`Bot added to chat ${chatId}`);
+      return;
+    }
+
+    for (const user of newChatMembers) {
+      const { id: userId, first_name } = user;
+      const timeUntilBanLifted = new Date().getTime() + 1000 * 60;
+      await this.bot.telegram.banChatMember(chatId, userId, timeUntilBanLifted);
+      console.log(
+        `User ${first_name} with id: ${userId} attempted to join chat ${chatId} via direct link: removing from group`,
+      );
+      await this.bot.telegram.sendMessage(
+        chatId,
+        `User [${first_name}](tg://user?id=${userId}) attempted to join chat via direct link: removing from group`,
+        {
+          parse_mode: 'Markdown',
+        },
+      );
+    }
+  }
 }

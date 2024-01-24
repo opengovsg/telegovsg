@@ -39,4 +39,28 @@ export class BotUpdate {
     const { from: user, chat, user_chat_id: userChatId } = ctx.chatJoinRequest
     await this.bouncerService.handleNewChatMember(chat, user, userChatId)
   }
+
+  @On('new_chat_members')
+  async handleDirectInvite(@Ctx() ctx: Context) {
+    const {
+      chat: { id: chatId },
+      botInfo: { id: botId },
+      message: potentialMessage,
+    } = ctx;
+
+    const message = potentialMessage as ServiceMessageBundle;
+    const isNewUserMessage =
+      message &&
+      'new_chat_members' in message &&
+      Array.isArray(message.new_chat_members);
+    if (!isNewUserMessage) {
+      return;
+    } else {
+      await this.bouncerService.handleDirectInvite(
+        chatId,
+        botId,
+        message.new_chat_members,
+      );
+    }
+  }
 }

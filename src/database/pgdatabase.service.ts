@@ -10,9 +10,9 @@ const NEON_SESSION_URL = 'pg.neon.tech';
 
 @Injectable()
 export class PgDatabaseService extends DatabaseService {
-  private pool: Pool<Client>;
+  public readonly pool: Pool<Client>;
 
-  constructor(private configService: ConfigService) {
+  constructor(private readonly configService: ConfigService) {
     super();
 
     const isNeonPasswordless =

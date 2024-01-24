@@ -14,6 +14,7 @@ import {
 } from './config/env.config'
 import { DatabaseModule } from './database/database.module'
 import { TelegrafFiltersModule } from './filters/telegraf-filters.module'
+import { BouncerModule } from './bouncer/bouncer.module'
 
 @Module({
   imports: [
@@ -38,6 +39,7 @@ import { TelegrafFiltersModule } from './filters/telegraf-filters.module'
     TelegrafFiltersModule,
     AuthModule,
     BotModule,
+    BouncerModule,
   ],
   controllers: [AppController],
   providers: [AppService],

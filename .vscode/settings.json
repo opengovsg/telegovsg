@@ -1,0 +1,25 @@
+{
+  "prettier.configPath": ".prettierrc",
+  "prettier.requireConfig": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnPaste": false,
+
+  // Format on save using the default formatter
+  "editor.formatOnSave": true,
+
+  // Enable ESLint to auto-fix issues on save
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
+
+  // Ensure ESLint works with TypeScript
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact"
+  ],
+
+  // Optional: Control Prettier configuration via ESLint
+  "prettier.eslintIntegration": true
+}

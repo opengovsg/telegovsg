@@ -1,9 +1,9 @@
-import { IsString } from 'class-validator';
+import { IsString } from 'class-validator'
 
 export class SgidCallbackCookieDto {
   @IsString()
-  codeVerifier: string;
+  codeVerifier: string
 
   @IsString()
-  nonce: string;
+  nonce: string
 }

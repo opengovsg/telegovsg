@@ -1,22 +1,22 @@
-import Pool from 'pg-pool';
-import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { Postgres } from '@telegraf/session/pg';
-import { NoticeLoggingClient } from './client/NoticeLoggingClient';
-import { DatabaseService } from './database.service';
-import { Client } from 'pg';
+import Pool from 'pg-pool'
+import { Injectable } from '@nestjs/common'
+import { ConfigService } from '@nestjs/config'
+import { Postgres } from '@telegraf/session/pg'
+import { NoticeLoggingClient } from './client/NoticeLoggingClient'
+import { DatabaseService } from './database.service'
+import { Client } from 'pg'
 
-const NEON_SESSION_URL = 'pg.neon.tech';
+const NEON_SESSION_URL = 'pg.neon.tech'
 
 @Injectable()
 export class PgDatabaseService extends DatabaseService {
-  public readonly pool: Pool<Client>;
+  public readonly pool: Pool<Client>
 
   constructor(private readonly configService: ConfigService) {
-    super();
+    super()
 
     const isNeonPasswordless =
-      this.configService.get<string>('database.host') === NEON_SESSION_URL;
+      this.configService.get<string>('database.host') === NEON_SESSION_URL
 
     const pool = isNeonPasswordless
       ? new Pool(
@@ -40,9 +40,9 @@ export class PgDatabaseService extends DatabaseService {
           ssl:
             process.env.NODE_ENV === 'production' ||
             this.configService.get<boolean>('database.ssl'),
-        });
+        })
 
-    this.pool = pool;
-    this.store = Postgres({ pool });
+    this.pool = pool
+    this.store = Postgres({ pool })
   }
 }

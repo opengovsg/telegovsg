@@ -1,17 +1,8 @@
-import * as path from 'path';
 import Pool from 'pg-pool';
-import { promises as fs } from 'fs';
-import {
-  Kysely,
-  Migrator,
-  PostgresDialect,
-  FileMigrationProvider,
-} from 'kysely';
+import { Kysely, PostgresDialect } from 'kysely';
 import { config } from 'dotenv';
 import { parse } from 'pg-connection-string';
-import { NoticeLoggingClient } from './client/NoticeLoggingClient';
-
-const NEON_SESSION_URL = 'pg.neon.tech';
+import { NoticeLoggingClient } from '../client/NoticeLoggingClient';
 
 config();
 
@@ -25,7 +16,8 @@ interface DatabaseConfig {
   ssl: string | boolean;
 }
 
-async function migrateToLatest() {
+const NEON_SESSION_URL = 'pg.neon.tech';
+export const generateDb = async () => {
   const databaseUrl = process.env.POSTGRES_URL || process.env.DATABASE_URL;
   let databaseConfig = {
     url: databaseUrl,
@@ -50,7 +42,6 @@ async function migrateToLatest() {
   }
   const isNeonPasswordless = databaseConfig.host === NEON_SESSION_URL;
 
-  console.log(isNeonPasswordless);
   const pool = isNeonPasswordless
     ? new Pool(
         {
@@ -73,44 +64,9 @@ async function migrateToLatest() {
         ssl:
           process.env.NODE_ENV === 'production' || Boolean(databaseConfig.ssl),
       });
-  const database = new Kysely({
+  return new Kysely({
     dialect: new PostgresDialect({
       pool,
     }),
   });
-
-  const migrator = new Migrator({
-    db: database,
-    provider: new FileMigrationProvider({
-      fs,
-      path,
-      migrationFolder: path.join(__dirname, 'migrations'),
-    }),
-  });
-
-  console.log(migrator);
-  const { error, results } = await migrator.migrateToLatest();
-
-  console.log(error, results);
-  results?.forEach((migrationResult) => {
-    if (migrationResult.status === 'Success') {
-      console.log(
-        `Migration "${migrationResult.migrationName}" was executed successfully`,
-      );
-    } else if (migrationResult.status === 'Error') {
-      console.error(
-        `Failed to execute migration "${migrationResult.migrationName}"`,
-      );
-    }
-  });
-
-  if (error) {
-    console.error('Failed to migrate');
-    console.error(error);
-    process.exit(1);
-  }
-
-  await database.destroy();
-}
-
-migrateToLatest();
+};

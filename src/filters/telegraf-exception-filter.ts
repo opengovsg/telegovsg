@@ -1,12 +1,12 @@
-import { Catch, ExceptionFilter, Logger } from '@nestjs/common';
-import { TelegrafException } from 'nestjs-telegraf';
+import { Catch, ExceptionFilter, Logger } from '@nestjs/common'
+import { TelegrafException } from 'nestjs-telegraf'
 
 @Catch(TelegrafException)
 export class TelegrafExceptionFilter implements ExceptionFilter {
-  private readonly logger = new Logger('TelegrafException');
+  private readonly logger = new Logger('TelegrafException')
 
   async catch(exception: TelegrafException): Promise<void> {
-    this.logger.log(exception.message);
+    this.logger.log(exception.message)
   }
 
   // If it is preferable to send the error message via telegram to the user, the below version of the catch function can be used instead

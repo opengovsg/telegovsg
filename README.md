@@ -105,3 +105,12 @@ $ npm ci
 ```bash
 $ npm run start:debug
 ```
+
+### Lint
+
+1. (Recommended) Install extensions [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) and [eslint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
+1. Otherwise, manually run 
+
+```bash
+$ npm run lint
+```

@@ -85,7 +85,7 @@ export class AuthController {
       const verifiedMessage = [`You are verified with the following details:`];
       for (const poDetail of authDetails.poDetails) {
         verifiedMessage.push(
-          `Agency: ${poDetail.agency_name}\nDepartment: ${poDetail.department_name}\nTitle: ${poDetail.employment_title}`,
+          `<b>Agency: </b>${poDetail.agency_name}\n<b>Department: </b>${poDetail.department_name}\n<b>Title: </b>${poDetail.employment_title}`,
         );
       }
 
@@ -100,7 +100,9 @@ export class AuthController {
         poDetails,
       });
 
-      message = `Authenticated Public Officer\n\n${verifiedMessage.join('\n')}`;
+      message = `<b>Authenticated Public Officer</b>\n\n${verifiedMessage.join(
+        '\n',
+      )}`;
     } else if (authDetails.status === SgidAuthStatus.AUTHENTICATED_USER) {
       message = 'Authenticated, but not Public Officer';
     } else {
@@ -111,6 +113,7 @@ export class AuthController {
     const chatId = userId;
     if (message.length) {
       await this.bot.telegram.sendMessage(chatId, message, {
+        parse_mode: 'HTML',
         disable_notification: true,
       });
     }

@@ -31,6 +31,12 @@ A template to build Telegram bots for Singapore Government public officers
 1. Create a database with [Neon](https://console.neon.tech/app/projects).
 2. Store the database's connection url in a safe location.
 
+### Migrations
+
+```bash
+npm run migrations
+```
+
 ### Deployment
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fopengovsg%2Ftelegovsg%2Ftree%2Fmain&env=SGID_CLIENT_ID,SGID_CLIENT_SECRET,SGID_PRIVATE_KEY,BOT_TOKEN,DATABASE_URL)

@@ -5,6 +5,8 @@ import { Postgres } from '@telegraf/session/pg'
 import { NoticeLoggingClient } from './client/NoticeLoggingClient'
 import { DatabaseService } from './database.service'
 import { Client } from 'pg'
+import { Kysely, PostgresDialect } from 'kysely'
+import { BouncerDatabase } from './types'
 
 const NEON_SESSION_URL = 'pg.neon.tech'
 
@@ -44,5 +46,10 @@ export class PgDatabaseService extends DatabaseService {
 
     this.pool = pool
     this.store = Postgres({ pool })
+    this.bouncerStore = new Kysely<BouncerDatabase>({
+      dialect: new PostgresDialect({
+        pool: this.pool,
+      }),
+    })
   }
 }

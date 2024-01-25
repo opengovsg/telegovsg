@@ -36,17 +36,27 @@ export class BotUpdate {
   @Command('getInvite')
   @UseGuards(UserGuard)
   async getInvite(@Ctx() ctx: UserContext) {
-    const groupInfo = await this.bouncerService.getGroups()
-    const message =
-      'You can join the following groups:\n\n' +
-      groupInfo.map((group) => `${group.name}: ${group.invite_link}`).join('\n')
-    await ctx.replyWithHTML(message)
+    try {
+      const groupInfo = await this.bouncerService.getGroups()
+      const message =
+        'You can join the following groups:\n\n' +
+        groupInfo
+          .map((group) => `${group.name}: ${group.invite_link}`)
+          .join('\n')
+      await ctx.replyWithHTML(message)
+    } catch (err) {
+      console.log(`Error occurred when retrieving chat invite links: ${err}`)
+    }
   }
 
   @On('chat_join_request')
   async handleNewChatMembers(@Ctx() ctx: Context) {
     const { from: user, chat, user_chat_id: userChatId } = ctx.chatJoinRequest
-    await this.bouncerService.handleNewChatMember(chat, user, userChatId)
+    try {
+      await this.bouncerService.handleNewChatMember(chat, user, userChatId)
+    } catch (err) {
+      console.log(`Error when joining chat: ${err}`)
+    }
   }
 
   @On('new_chat_members')
@@ -66,13 +76,16 @@ export class BotUpdate {
     const isGroupChat = chat && chat.title
     if (!isNewUserMessage || !isGroupChat) {
       return
-    } else {
+    }
+    try {
       await this.bouncerService.handleDirectInvite(
         chat.id,
         chat.title,
         botId,
         message.new_chat_members,
       )
+    } catch (err) {
+      console.log(`Error when handling user joining chat: ${err}`)
     }
   }
 }

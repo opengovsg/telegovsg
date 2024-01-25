@@ -13,6 +13,7 @@ import {
   sgidEnvConfig,
 } from './config/env.config';
 import { DatabaseModule } from './database/database.module';
+import { TelegrafFiltersModule } from './filters/telegraf-filters.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { DatabaseModule } from './database/database.module';
       }),
     }),
     DatabaseModule,
+    TelegrafFiltersModule,
     AuthModule,
     BotModule,
   ],

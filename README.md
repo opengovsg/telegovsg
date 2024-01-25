@@ -33,7 +33,7 @@ A template to build Telegram bots for Singapore Government public officers
 
 ### Deployment
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fopengovsg%2Ftelegovsg%2Ftree%2Fmaster&env=SGID_CLIENT_ID,SGID_CLIENT_SECRET,SGID_PRIVATE_KEY,BOT_TOKEN,DATABASE_URL)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fopengovsg%2Ftelegovsg%2Ftree%2Fmain&env=SGID_CLIENT_ID,SGID_CLIENT_SECRET,SGID_PRIVATE_KEY,BOT_TOKEN,DATABASE_URL)
 
 1. Click the button above to clone and deploy this project.
 2. Enter the sgID secrets and Telegram bot token obtained from the previous two sections.
@@ -109,7 +109,7 @@ $ npm run start:debug
 ### Lint
 
 1. (Recommended) Install extensions [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) and [eslint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
-1. Otherwise, manually run 
+1. Otherwise, manually run
 
 ```bash
 $ npm run lint

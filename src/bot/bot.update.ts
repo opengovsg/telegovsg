@@ -15,6 +15,7 @@ export class BotUpdate {
         `<b>Agency: </b>${poDetail.agency_name}\n<b>Department: </b>${poDetail.department_name}\n<b>Title: </b>${poDetail.employment_title}`,
       )
     }
+    verifiedMessage.push(`\n/logout to log out`)
     await ctx.replyWithHTML(
       `<b>Authenticated Public Officer</b>\n\n${verifiedMessage.join('\n')}`,
     )

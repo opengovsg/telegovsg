@@ -18,18 +18,23 @@ A template to build Telegram bots for Singapore Government public officers
   in your [profile page](https://developer.id.gov.sg/profile).
 
 2. Create a new sgID client, with `NAME` and `PUBLIC OFFICER DETAILS` included in the scope.  
-   Store the secrets in a safe location.
+   Store the secrets in a [safe location](#storing-secrets).
 3. Add `http://localhost:3000/auth/sgid/callback` to the list of Redirect URLs.
 
 ### Create a Telegram bot
 
-1. Create a new bot with [BotFather](https://t.me/botfather).
-2. Store the bot's security token in a safe location.
+1. Create a new bot by [obtaining a bot token](https://core.telegram.org/bots/tutorial#obtain-your-bot-token) from [BotFather](https://t.me/botfather).
+2. Store the bot's security token in a [safe location](#storing-secrets).
 
 ### Create a Neon database
 
 1. Create a database with [Neon](https://console.neon.tech/app/projects).
-2. Store the database's connection url in a safe location.
+2. Store the database's connection url in a [safe location](#storing-secrets).
+
+### Storing secrets
+Generally, we recommend the use of a password manager like [1Password](https://1password.com/) to store secrets.
+Many password managers would also feature the ability to share secrets within a team, which would be useful if 
+you are collaborating with others to build the bot.
 
 ### Deployment
 
